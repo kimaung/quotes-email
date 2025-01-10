@@ -21,11 +21,11 @@ jobs:
   
       - name: Send Emails  
         run: |  
-          python3 -m pip install secure-smtplib  
           python3 - <<EOF  
 import smtplib  
 from email.mime.text import MIMEText  
 from email.mime.multipart import MIMEMultipart  
+import os  
   
 recipients = [  
     "mail.aessaputra@gmail.com",  
@@ -40,8 +40,8 @@ recipients = [
     "foreveryours@outlook.sg"  
 ]  
   
-quote = "${{ env.quote }}"  
-author = "${{ env.author }}"  
+quote = os.getenv('quote')  
+author = os.getenv('author')  
   
 for email in recipients:  
     msg = MIMEMultipart()  
@@ -52,7 +52,7 @@ for email in recipients:
     body = f"<h1>Quote of the Day</h1><p>\"{quote}\" - {author}</p>"  
     msg.attach(MIMEText(body, 'html'))  
   
-    with smtplib.SMTP('mail.aes.my.id', 465) as server:  
+    with smtplib.SMTP('mail.aes.my.id', 587) as server:  
         server.starttls()  
         server.login('${{ secrets.SMTP_USERNAME }}', '${{ secrets.SMTP_PASSWORD }}')  
         server.sendmail(msg['From'], msg['To'], msg.as_string())  
