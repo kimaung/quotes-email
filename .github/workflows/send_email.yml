@@ -16,8 +16,8 @@ jobs:
         run: |
           response=$(curl -s -H "X-Api-Key: 3s/x4frit3GOGhj4NgYgvQ==ADMCEqbcW7LGZalp" https://api.api-ninjas.com/v1/quotes)          
           echo "Response: $response"  # Untuk debugging        
-          quote=$(echo $response | jq -r '.[0].quote')  # Ambil kutipan dari elemen pertama        
-          author=$(echo $response | jq -r '.[0].author')  # Ambil penulis dari elemen pertama        
+          quote=$(echo $response | jq -r '.[0].quote')    
+          author=$(echo $response | jq -r '.[0].author')    
           echo "quote=$quote" >> $GITHUB_ENV      
           echo "author=$author" >> $GITHUB_ENV
 
