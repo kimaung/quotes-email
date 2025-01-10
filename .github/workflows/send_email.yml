@@ -37,5 +37,4 @@ jobs:
           from: 'info@aes.my.id' # Nama pengirim
           html_body: |
             <h3>Kata - Kata Hari Ini 📜</h3>    
-            <p style="font-style: italic; font-size: 20px; color: #555; margin: 20px 0; border-left: 4px solid #ccc; padding-left: 10px;">"${{ env.quote }}" - ${{ env.author }}<p>  
-
+            <p style="font-style: italic; font-size: 18px; color: #333; margin: 20px 0; border-left: 4px solid #007BFF; padding-left: 15px; line-height: 1.5;">"${{ env.quote }}" - ${{ env.author }}<p>
