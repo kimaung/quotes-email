@@ -28,7 +28,7 @@ jobs:
         uses: dawidd6/action-send-mail@v4
         with:
           server_address: mail.aes.my.id # Alamat server SMTP Anda
-          server_port: 587 # Port server SMTP Anda
+          server_port: 465 # Port server SMTP Anda
           secure: true # Menggunakan TLS
           username: ${{ secrets.MAIL_USERNAME }} # Username email
           password: ${{ secrets.MAIL_PASSWORD }} # Password email
