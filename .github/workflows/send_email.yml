@@ -1,54 +1,64 @@
-name: Send Email with Quote  
-  
-on:  
-  push:  
-    branches:  
-      - main  # Ganti dengan nama branch yang Anda inginkan  
-  
-jobs:  
-  send_email:  
-    runs-on: ubuntu-latest  
-    steps:  
-      - name: Get Quote  
-        id: get_quote  
-        run: |  
-          response=$(curl -s -H "X-Api-Key: 3s/x4frit3GOGhj4NgYgvQ==ADMCEqbcW7LGZalp" https://api.api-ninjas.com/v1/quotes)      
-          echo "Response: $response"  # Untuk debugging    
-          quote=$(echo $response | jq -r '.[0].quote')  # Ambil kutipan dari elemen pertama    
-          author=$(echo $response | jq -r '.[0].author')  # Ambil penulis dari elemen pertama    
-          echo "quote=$quote" >> $GITHUB_ENV  
-          echo "author=$author" >> $GITHUB_ENV  
-  
-      - name: Debug  
-        run: |  
-          echo "Quote: ${{ env.quote }}"  
-          echo "Author: ${{ env.author }}"  
-  
-      - name: Send Emails  
-        run: |  
-          python3 - <<EOF  
-import smtplib  
-from email.mime.text import MIMEText  
-from email.mime.multipart import MIMEMultipart  
-import os  
-  
-recipients = ["mail.aessaputra@gmail.com","aingmauuungg@gmail.com","cloud.aessaputra@gmail.com","contact.aessaputra@gmail.com","aessaputra@aol.com","aessaputra@proton.me","aessaputra@tuta.io","aessaputra@outlook.com","aessaputra407@gmail.com","foreveryours@outlook.sg"]
+  name: Send Email with Quote  
+    
+  on:  
+    push:  
+      branches:  
+        - main  # Ganti dengan nama branch yang Anda inginkan  
+    
+  jobs:  
+    send_email:  
+      runs-on: ubuntu-latest  
+      steps:  
+        - name: Get Quote  
+          id: get_quote  
+          run: |  
+            response=$(curl -s -H "X-Api-Key: 3s/x4frit3GOGhj4NgYgvQ==ADMCEqbcW7LGZalp" https://api.api-ninjas.com/v1/quotes)        
+            echo "Response: $response"  # Untuk debugging      
+            quote=$(echo $response | jq -r '.[0].quote')  # Ambil kutipan dari elemen pertama      
+            author=$(echo $response | jq -r '.[0].author')  # Ambil penulis dari elemen pertama      
+            echo "quote=$quote" >> $GITHUB_ENV    
+            echo "author=$author" >> $GITHUB_ENV    
+    
+        - name: Debug    
+          run: |    
+            echo "Quote: ${{ env.quote }}"    
+            echo "Author: ${{ env.author }}"    
+    
+        - name: Send Emails    
+          run: |    
+            python3 - <<EOF    
+  import smtplib    
+  from email.mime.text import MIMEText    
+  from email.mime.multipart import MIMEMultipart    
+  import os    
 
-  
-quote = os.getenv('quote')  
-author = os.getenv('author')  
-  
-for email in recipients:  
-    msg = MIMEMultipart()  
-    msg['From'] = 'info@aes.my.id'  
-    msg['To'] = email  
-    msg['Subject'] = 'Kata - Kata Hari Ini 📜'  
-  
-    body = f"<h1>Quote of the Day</h1><p>\"{quote}\" - {author}</p>"  
-    msg.attach(MIMEText(body, 'html'))  
-  
-    with smtplib.SMTP('mail.aes.my.id', 587) as server:  
-        server.starttls()  
-        server.login('${{ secrets.SMTP_USERNAME }}', '${{ secrets.SMTP_PASSWORD }}')  
-        server.sendmail(msg['From'], msg['To'], msg.as_string())  
-EOF  
+recipients =  
+    ["mail.aessaputra@gmail.com",  
+    "aingmauuungg@gmail.com",  
+    "cloud.aessaputra@gmail.com",  
+    "contact.aessaputra@gmail.com",  
+    "aessaputra@aol.com",  
+    "aessaputra@proton.me",  
+    "aessaputra@tuta.io",  
+    "aessaputra@outlook.com",  
+    "aessaputra407@gmail.com",  
+    "foreveryours@outlook.sg"]   
+
+    
+  quote = os.getenv('quote')    
+  author = os.getenv('author')    
+      
+  for email in recipients:    
+      msg = MIMEMultipart()    
+      msg['From'] = 'info@aes.my.id'    
+      msg['To'] = email    
+      msg['Subject'] = 'Kata - Kata Hari Ini 📜'    
+      
+      body = f"<h1>Quote of the Day</h1><p>\"{quote}\" - {author}</p>"    
+      msg.attach(MIMEText(body, 'html'))    
+      
+      with smtplib.SMTP('mail.aes.my.id', 587) as server:    
+          server.starttls()    
+          server.login('${{ secrets.SMTP_USERNAME }}', '${{ secrets.SMTP_PASSWORD }}')    
+          server.sendmail(msg['From'], msg['To'], msg.as_string())    
+  EOF    
