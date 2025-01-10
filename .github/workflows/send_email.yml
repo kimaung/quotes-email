@@ -19,6 +19,11 @@ jobs:
           echo "quote=$quote" >> $GITHUB_ENV  
           echo "author=$author" >> $GITHUB_ENV  
   
+      - name: Debug  
+        run: |  
+          echo "Quote: ${{ env.quote }}"  
+          echo "Author: ${{ env.author }}"  
+  
       - name: Send Emails  
         run: |  
           python3 - <<EOF  
@@ -27,18 +32,8 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart  
 import os  
   
-recipients = [  
-    "mail.aessaputra@gmail.com",  
-    "aingmauuungg@gmail.com",  
-    "cloud.aessaputra@gmail.com",  
-    "contact.aessaputra@gmail.com",  
-    "aessaputra@aol.com",  
-    "aessaputra@proton.me",  
-    "aessaputra@tuta.io",  
-    "aessaputra@outlook.com",  
-    "aessaputra407@gmail.com",  
-    "foreveryours@outlook.sg"  
-]  
+recipients = ["mail.aessaputra@gmail.com","aingmauuungg@gmail.com","cloud.aessaputra@gmail.com","contact.aessaputra@gmail.com","aessaputra@aol.com","aessaputra@proton.me","aessaputra@tuta.io","aessaputra@outlook.com","aessaputra407@gmail.com","foreveryours@outlook.sg"]
+
   
 quote = os.getenv('quote')  
 author = os.getenv('author')  
