@@ -3,7 +3,7 @@ name: Send Email with Quote
 on:
   push:
     branches:
-      - main # Ganti dengan nama branch yang Anda inginkan
+      - main
 
 jobs:
   send_email:
@@ -27,15 +27,15 @@ jobs:
       - name: Send Email
         uses: dawidd6/action-send-mail@v4
         with:
-          server_address: mail.aes.my.id # Alamat server SMTP Anda
-          server_port: 465 # Port server SMTP Anda
-          secure: true # Menggunakan TLS
-          username: ${{ secrets.MAIL_USERNAME }} # Username email
-          password: ${{ secrets.MAIL_PASSWORD }} # Password email
+          server_address: mail.aes.my.id
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
           subject: 'Quote of the Day'
-          to: mail.aessaputra@gmail.com
-          bcc: aingmauuungg@gmail.com,cloud.aessaputra@gmail.com,contact.aessaputra@gmail.com,aessaputra@aol.com,aessaputra@proton.me,aessaputra@tuta.io,aessaputra@outlook.com,aessaputra407@gmail.com,foreveryours@outlook.sg
-          from: 'Quotes' # Nama pengirim
+          to: aessaputra@yahoo.com
+          bcc: mail.aessaputra@gmail.com,aingmauuungg@gmail.com,cloud.aessaputra@gmail.com,contact.aessaputra@gmail.com,aessaputra@aol.com,aessaputra@proton.me,aessaputra@tuta.io,aessaputra@outlook.com,aessaputra407@gmail.com,foreveryours@outlook.sg
+          from: 'Quotes'
           html_body: |
             <h3>Kata - Kata Hari Ini 📜</h3>    
             <p style="font-style: italic; font-size: 18px; color: #333; margin: 20px 0; border-left: 4px solid #007BFF; padding-left: 15px; line-height: 1.5;">"${{ env.quote }}" - ${{ env.author }}<p>
