@@ -14,8 +14,7 @@ jobs:
       - name: Get Quote
         id: get_quote
         run: |
-          response=$(curl -s -H "X-Api-Key: 3s/x4frit3GOGhj4NgYgvQ==ADMCEqbcW7LGZalp" https://api.api-ninjas.com/v1/quotes)          
-          echo "Response: $response"  # Untuk debugging        
+          response=$(curl -s -H "X-Api-Key: 3s/x4frit3GOGhj4NgYgvQ==ADMCEqbcW7LGZalp" https://api.api-ninjas.com/v1/quotes)               
           quote=$(echo $response | jq -r '.[0].quote')    
           author=$(echo $response | jq -r '.[0].author')    
           echo "quote=$quote" >> $GITHUB_ENV      
