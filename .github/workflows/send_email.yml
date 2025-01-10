@@ -57,8 +57,8 @@ for email in recipients:
     body = f"<h1>Quote of the Day</h1><p>\"{quote}\" - {author}</p>"    
     msg.attach(MIMEText(body, 'html'))    
     
-      with smtplib.SMTP('mail.aes.my.id', 587) as server:    
-          server.starttls()    
-          server.login('${{ secrets.SMTP_USERNAME }}', '${{ secrets.SMTP_PASSWORD }}')    
-          server.sendmail(msg['From'], msg['To'], msg.as_string())    
+                  with smtplib.SMTP('mail.aes.my.id', 587) as server:    
+                      server.starttls()    
+                      server.login('${{ secrets.SMTP_USERNAME }}', '${{ secrets.SMTP_PASSWORD }}')    
+                      server.sendmail(msg['From'], msg['To'], msg.as_string())    
 EOF    
