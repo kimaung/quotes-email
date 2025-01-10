@@ -37,4 +37,4 @@ jobs:
           from: 'info@aes.my.id' # Nama pengirim
           html_body: |
             <h1>Kata - Kata Hari Ini 📜</h1>    
-            <p>"${{ env.quote }}" - ${{ env.author }}</p>
+            <blockquote>"${{ env.quote }}" - ${{ env.author }}</blockquote>
