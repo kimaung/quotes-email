@@ -45,8 +45,8 @@ jobs:
                     "foreveryours@outlook.sg"  
                 ]  
   
-quote = os.getenv('quote')    
-author = os.getenv('author')    
+                  quote = os.getenv('quote')    
+                  author = os.getenv('author')    
     
 for email in recipients:    
     msg = MIMEMultipart()    
