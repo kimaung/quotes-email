@@ -1,11 +1,9 @@
 name: Send Email with Quote
 
 on:
-  # schedule:
-  #   - cron: '0 0 */3 * *'
   push:
     branches:
-      - main # Ganti dengan nama branch yang Anda inginkan
+      - main
 
 jobs:
   send_email:
@@ -14,25 +12,25 @@ jobs:
       - name: Get Quote
         id: get_quote
         run: |
-          response=$(curl -s -H "X-Api-Key: 3s/x4frit3GOGhj4NgYgvQ==ADMCEqbcW7LGZalp" https://api.api-ninjas.com/v1/quotes)    
-          echo "Response: $response"  # Untuk debugging  
-          quote=$(echo $response | jq -r '.[0].quote')  # Ambil kutipan dari elemen pertama  
-          author=$(echo $response | jq -r '.[0].author')  # Ambil penulis dari elemen pertama  
-          echo "::set-output name=quote::$quote"  
-          echo "::set-output name=author::$author"
+          response=$(curl -s -H "X-Api-Key: 3s/x4frit3GOGhj4NgYgvQ==ADMCEqbcW7LGZalp" https://api.api-ninjas.com/v1/quotes)      
+          echo "Response: $response"  # Untuk debugging    
+          quote=$(echo $response | jq -r '.[0].quote')  # Ambil kutipan dari elemen pertama    
+          author=$(echo $response | jq -r '.[0].author')  # Ambil penulis dari elemen pertama    
+          echo "quote=$quote" >> $GITHUB_ENV  
+          echo "author=$author" >> $GITHUB_ENV
 
-      - name: Send Email
-        uses: hilarion5/send-mail@v1
-        with:
-          smtp-server: mail.aes.my.id # Ganti dengan alamat server SMTP Anda
-          smtp-port: 465 # Ganti dengan port server SMTP Anda
-          smtp-secure: true # Atur ke true jika menggunakan SSL
-          from-email: info@aes.my.id # Ganti dengan alamat email pengirim
-          to-email: mail.aessaputra@gmail.com,aingmauuungg@gmail.com,cloud.aessaputra@gmail.com,contact.aessaputra@gmail.com,aessaputra@aol.com,aessaputra@proton.me,aessaputra@tuta.io,aessaputra@outlook.com,aessaputra407@gmail.com,foreveryours@outlook.sg # Ganti dengan alamat email penerima
-          username: ${{ secrets.SMTP_USERNAME }} # Username SMTP Anda
-          password: ${{ secrets.SMTP_PASSWORD }} # Password SMTP Anda
-          subject: 'Quote of the Day'
-          body: 'Kata - kata hari ini: "${{ steps.get_quote.outputs.quote }}" - ${{ steps.get_quote.outputs.author }}'
-          html: |
-            <h1>Quote of the Day</h1>    
-            <p>"${{ steps.get_quote.outputs.quote }}" - ${{ steps.get_quote.outputs.author }}</p>
+      - name: Send Emails
+        run: |
+          recipients=("mail.aessaputra@gmail.com" "aingmauuungg@gmail.com" "cloud.aessaputra@gmail.com" "contact.aessaputra@gmail.com" "aessaputra@aol.com" "aessaputra@proton.me" "aessaputra@tuta.io" "aessaputra@outlook.com" "aessaputra407@gmail.com" "foreveryours@outlook.sg")  
+          for email in "${recipients[@]}"; do  
+            echo "Sending email to $email"  
+            {  
+              echo "Subject: Kata - Kata Hari Ini 📜"  
+              echo "To: $email"  
+              echo "From: info@aes.my.id"  
+              echo "Content-Type: text/html"  
+              echo ""  
+              echo "<h1>Quote of the Day</h1>"  
+              echo "<p>\"${{ env.quote }}\" - ${{ env.author }}</p>"  
+            } | sendmail -t  
+          done
