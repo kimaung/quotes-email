@@ -20,11 +20,6 @@ jobs:
           echo "quote=$quote" >> $GITHUB_ENV      
           echo "author=$author" >> $GITHUB_ENV
 
-      - name: Debug
-        run: |
-          echo "Quote: ${{ env.quote }}"      
-          echo "Author: ${{ env.author }}"
-
       - name: Send Email
         uses: dawidd6/action-send-mail@v4
         with:
