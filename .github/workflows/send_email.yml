@@ -11,16 +11,39 @@ jobs:
   send_email:
     runs-on: ubuntu-latest
     steps:
-      - name: Get Quote
+      - name: Pilih API Secara Acak
+        id: choose_api
+        run: |
+          random_number=$((RANDOM % 2))
+          if [ $random_number -eq 0 ]; then
+            echo "api_url=https://api.api-ninjas.com/v1/quotes" >> $GITHUB_OUTPUT
+            echo "api_key_header=X-Api-Key" >> $GITHUB_OUTPUT
+            echo "api_key_value=${{ secrets.API_NINJAS_KEY }}" >> $GITHUB_OUTPUT
+          else
+            echo "api_url=https://www.quoterism.com/api/quotes/random" >> $GITHUB_OUTPUT
+            echo "api_key_header=" >> $GITHUB_OUTPUT
+            echo "api_key_value=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Ambil Kutipan
         id: get_quote
         run: |
-          response=$(curl -s -H "X-Api-Key: 3s/x4frit3GOGhj4NgYgvQ==ADMCEqbcW7LGZalp" https://api.api-ninjas.com/v1/quotes)               
-          quote=$(echo $response | jq -r '.[0].quote')    
-          author=$(echo $response | jq -r '.[0].author')    
-          echo "quote=$quote" >> $GITHUB_ENV      
+          if [ -n "${{ steps.choose_api.outputs.api_key_header }}" ]; then
+            response=$(curl -s -H "${{ steps.choose_api.outputs.api_key_header }}: ${{ steps.choose_api.outputs.api_key_value }}" ${{ steps.choose_api.outputs.api_url }})
+          else
+            response=$(curl -s ${{ steps.choose_api.outputs.api_url }})
+          fi
+          if [ "${{ steps.choose_api.outputs.api_url }}" == "https://api.api-ninjas.com/v1/quotes" ]; then
+            quote=$(echo $response | jq -r '.[0].quote')
+            author=$(echo $response | jq -r '.[0].author')
+          else
+            quote=$(echo $response | jq -r '.random.text')
+            author=$(echo $response | jq -r '.random.author.name')
+          fi
+          echo "quote=$quote" >> $GITHUB_ENV
           echo "author=$author" >> $GITHUB_ENV
 
-      - name: Send Email
+      - name: Kirim Email
         uses: dawidd6/action-send-mail@v4
         with:
           server_address: mail.aes.my.id
@@ -28,10 +51,10 @@ jobs:
           secure: true
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: 'Quote of the Day'
+          subject: 'Quotes of the Day'
           to: aessaputra@yahoo.com
           bcc: mail.aessaputra@gmail.com,aingmauuungg@gmail.com,cloud.aessaputra@gmail.com,contact.aessaputra@gmail.com,aessaputra@aol.com,aessaputra@proton.me,aessaputra@tuta.io,aessaputra@outlook.com,aessaputra407@gmail.com,foreveryours@outlook.sg
           from: 'Quotes'
           html_body: |
-            <h3>📜 Kata - Kata Hari Ini 📜</h3>    
-            <p style="font-style: italic; font-size: 18px; color: #333; margin: 20px 0; border-left: 4px solid #A76D4D; padding-left: 15px; line-height: 1.5;">"${{ env.quote }}" - ${{ env.author }}<p>
+            <h3>📜 Kata - Kata Hari Ini 📜</h3>
+            <p style="font-style: italic; font-size: 18px; color: #333; margin: 20px 0; border-left: 4px solid #A76D4D; padding-left: 15px; line-height: 1.5;">"${{ env.quote }}" - ${{ env.author }}</p>
